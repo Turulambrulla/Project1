@@ -25,6 +25,7 @@ const Auto = sequelize.define('auto',{
     mark: {type: DataTypes.STRING, unique: true, allowNull: false},
     model: {type: DataTypes.STRING, allowNull: false},
     year: {type: DataTypes.INTEGER, allowNull: false},
+    dvs: {type: DataTypes.STRING, allowNull: false},
 })
 
 const Brand = sequelize.define('brand',{
