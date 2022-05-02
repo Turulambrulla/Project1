@@ -4,7 +4,6 @@ import App from './App';
 import Part from './zapch/Part';
 import User from "./zapch/User";
 
-
 export const Context = createContext(null)
 
 ReactDOM.render(
