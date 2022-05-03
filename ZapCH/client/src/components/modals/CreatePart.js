@@ -12,10 +12,6 @@ const CreatePart = ({ show, onHide }) => {
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)
 
-    const [mark, setMark] = useState('')
-    const [model, setModel] = useState('')
-    const [year, setYear] = useState(0)
-    const [dvs, setDvs] = useState('')
 
     const [info, setInfo] = useState([])
 
@@ -31,6 +27,7 @@ const CreatePart = ({ show, onHide }) => {
     const selectFile = e => {
         setFile(e.target.files[0])
     }
+    
     const addPart = () =>{
         const formData = new FormData()
         formData.append('name', name)
@@ -56,14 +53,16 @@ const CreatePart = ({ show, onHide }) => {
             <Modal.Body>
                 <Form>
 
-                    <Dropdown className="mt-3">
-                        <Dropdown.Toggle>Выберите авто</Dropdown.Toggle>
+                <Dropdown className="mt-2 mb-2">
+                        <Dropdown.Toggle>{auto.selectedAuto.name || "Выберите авто"}</Dropdown.Toggle>
                         <Dropdown.Menu>
                             {auto.autos.map(auto =>
                                 <Dropdown.Item
-                                    onClick={() => auto.setSelectedAuto(auto)}
+                                    onClick={() => part.setSelectedAuto(auto)}
                                     key={auto.id}
-                                >{auto.row}</Dropdown.Item>
+                                >
+                                    {auto.mark} {auto.model} {auto.year} {auto.dvs}
+                                </Dropdown.Item>
                             )}
                         </Dropdown.Menu>
                     </Dropdown>

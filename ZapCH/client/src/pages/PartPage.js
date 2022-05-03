@@ -17,7 +17,7 @@ const PartPage = () => {
         <Container className="mt-5">
             <Row>
                 <Col md={4}>
-                    <Image width={300} height={300} src={process.env.REACT_APP_API_URL + 'IMG/noimg.png'} />
+                    <Image width={300} height={300} src={process.env.REACT_APP_API_URL + part.img} />
                 </Col>
 
                 <Row>

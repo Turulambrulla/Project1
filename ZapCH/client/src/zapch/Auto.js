@@ -11,8 +11,8 @@ export default class Auto {
         this._autos = autos
     }
 
-    setSelectedAuto(autos) {
-        this._selectedAuto = autos
+    setSelectedAuto(autoId) {
+        this._selectedAuto = autoId
     }
 
     get autos() {
