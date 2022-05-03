@@ -8,12 +8,12 @@ class PartController{
     async create(req,res, next) {
         try{
 
-        let {name, price, brandId, autoId, info} = req.body
+        let {name, price, brand, autoId, info} = req.body
         const {img} = req.files
         let fileName = uuid.v4() + ".jpg"
         img.mv(path.resolve(__dirname, '..', 'Static', fileName))
 
-        const part = await Part.create({name, price, brandId, autoId, img: fileName})
+        const part = await Part.create({name, price, brand, autoId, img: fileName})
 
         if (info) {
             info = JSON.parse(info)
@@ -32,24 +32,20 @@ class PartController{
         }
     }
     async getAll(req,res) {
-        let {brandId, autoId, limit, page} = req.query
+        let {autoId, limit, page} = req.query
         page = page || 1
         limit = limit || 9
         let offset = page * limit - limit
 
         let parts;
-        if(!brandId && !autoId) {
+        if(!autoId) {
             parts = await Part.findAndCountAll({limit, offset})
         }
-        if(brandId && !autoId) {
-            parts = await Part.findAndCountAll({where:{brandId}, limit, offset})
+
+        if(autoId) {
+            parts = await Part.findAndCountAll({where:{autoId}, limit, offset})
         }
-        if(!brandId && autoId) {
-            parts = await Part.findAndCountAll({where:{autoIid}, limit, offset})
-        }
-        if(brandId && autoId) {
-            parts = await Part.findAndCountAll({where:{brandId, autoId}, limit, offset})
-        }
+
         return res.json(parts)
     }
     async getOne(req,res) {

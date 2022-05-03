@@ -12,6 +12,8 @@ const Part = sequelize.define('part',{
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement:true},
     name: {type: DataTypes.STRING, allowNull: false},
     price: {type: DataTypes.INTEGER, allowNull: false},
+    brand: {type: DataTypes.STRING, allowNull: false},
+    img: {type: DataTypes.STRING, allowNull: false},
 })
 
 const Part_info = sequelize.define('part_info',{
@@ -28,27 +30,16 @@ const Auto = sequelize.define('auto',{
     dvs: {type: DataTypes.STRING, allowNull: false},
 })
 
-const Brand = sequelize.define('brand',{
+const AutoParts = sequelize.define('auto_parts',{
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement:true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
 })
 
-const Brand_Mark = sequelize.define('brand_mark',{
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement:true}
-})
-
-Auto.hasMany(Part)
-Part.belongsTo(Auto)
-
-Brand.hasMany(Part)
-Part.belongsTo(Brand)
+Auto.belongsToMany(Part, {through:AutoParts})
+Part.belongsToMany(Auto, {through:AutoParts})
 
 Part.hasMany(Part_info, {as:'info'})
 Part_info.belongsTo(Part)
 
-Auto.belongsToMany(Brand, {through: Brand_Mark})
-Brand.belongsToMany(Auto, {through: Brand_Mark})
-
 module.exports = {
-    User, Part, Part_info, Auto, Brand, Brand_Mark
+    User, Part, Part_info, Auto, AutoParts
 }

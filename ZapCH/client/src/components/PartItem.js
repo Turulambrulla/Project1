@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Card } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import { useHistory } from "react-router-dom";
@@ -17,7 +17,7 @@ const PartItem = ({ part }) => {
             <div>
                 <div className="d-flex justify-content-between align-items-center">
 
-                    <Image width={100} height={100} src={'no-img.png'} />
+                    <Image width={100} height={100} src={process.env.REACT_APP_API_URL + part.img} />
                     <div>
                         {part.name}
                     </div>

@@ -1,17 +1,45 @@
 import React, { useContext, useState } from 'react';
 import Modal from "react-bootstrap/Modal";
-import {Form, Button, Dropdown, Col, Row} from "react-bootstrap";
+import { Form, Button, Dropdown, Col, Row } from "react-bootstrap";
 import { Context } from '../..';
+import { createPart } from '../../http/partAPI';
 
-const CreatePart = ({show, onHide}) => {
-    const {part} = useContext(Context)
+const CreatePart = ({ show, onHide }) => {
+    const { part, auto } = useContext(Context)
+
+    const [name, setName] = useState('')
+    const [brand, setBrand] = useState('')
+    const [price, setPrice] = useState(0)
+    const [file, setFile] = useState(null)
+
+    const [mark, setMark] = useState('')
+    const [model, setModel] = useState('')
+    const [year, setYear] = useState(0)
+    const [dvs, setDvs] = useState('')
+
     const [info, setInfo] = useState([])
 
-    const addInfo=() =>{
-        setInfo([...info,{title:'',description:'', number: Date.now()}])
+    const addInfo = () => {
+        setInfo([...info, { title: '', description: '', number: Date.now() }])
     }
-    const removeInfo=(number) =>{
+    const removeInfo = (number) => {
         setInfo(info.filter(i => i.number !== number))
+    }
+    const changeInfo = (key, value, number) => {
+        setInfo(info.map(i => i.number === number ? {...i, [key]: value} : i))
+    }
+    const selectFile = e => {
+        setFile(e.target.files[0])
+    }
+    const addPart = () =>{
+        const formData = new FormData()
+        formData.append('name', name)
+        formData.append('price', `${price}`)
+        formData.append('brand', brand)
+        formData.append('img', file)
+        formData.append('autoId', auto.selectedAuto.id)
+        formData.append('info', JSON.stringify(info))
+        createPart(formData).then(data => onHide())
     }
 
     return (
@@ -31,60 +59,70 @@ const CreatePart = ({show, onHide}) => {
                     <Dropdown className="mt-3">
                         <Dropdown.Toggle>Выберите авто</Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {part.autos.map(auto =>
-                                <Dropdown.Item key={auto.id}>{auto.mark}</Dropdown.Item>
-                                )}
+                            {auto.autos.map(auto =>
+                                <Dropdown.Item
+                                    onClick={() => auto.setSelectedAuto(auto)}
+                                    key={auto.id}
+                                >{auto.row}</Dropdown.Item>
+                            )}
                         </Dropdown.Menu>
                     </Dropdown>
-                    <Dropdown className="mt-3">
-                    <Dropdown.Toggle>Выберите бренд</Dropdown.Toggle>
-                        <Dropdown.Menu>
-                        {part.brands.map(brand =>
-                                <Dropdown.Item key={brand.id}>{brand.name}</Dropdown.Item>
-                                )}
-                        </Dropdown.Menu>
-                    </Dropdown>
-                        <Form.Control className="mt-3"
-                            placeholder='Введите название'
-                        />
-                        <Form.Control className="mt-3"
-                            placeholder='Описание'
-                        />
-                        <Form.Control className="mt-3"
-                            placeholder='Введите стоимость'
-                            type="number"
-                        />
-                        <Form.Control className="mt-3"
-                            type="file"
-                        />
-                <hr/>
-                <Button 
-                    variant={'outline-dark'}
-                    onClick={addInfo}
-                >Добавить новое свойство</Button>
-                {
-                    info.map(i =>
-                        <Row className="mt-3" key={i.number}> 
-                            <Col md={4}>
-                                <Form.Control
-                                    placeholder='Введите название свойства'
-                                />
-                            </Col>
-                            <Col md={4}>
-                                <Form.Control
-                                    placeholder='Введите описание свойства'
-                                />
-                            </Col>
-                            <Col md={4}>
-                                <Button 
-                                onClick={()=> removeInfo(i.number)}
-                                variant={'outline-dark'}
-                                
-                                >Удалить</Button>
-                            </Col>
-                        </Row>
+
+                    <Form.Control
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        className="mt-3"
+                        placeholder='Введите название'
+                    />
+                    <Form.Control
+                        value={brand}
+                        onChange={e => setBrand(e.target.value)}
+                        className="mt-3"
+                        placeholder='Введите бренд'
+                    />
+                    <Form.Control
+                        value={price}
+                        onChange={e => setPrice(Number(e.target.value))}
+                        className="mt-3"
+                        placeholder='Введите стоимость'
+                        type="number"
+                    />
+                    <Form.Control className="mt-3"
+                        type="file"
+                        onChange={selectFile}
+                    />
+                    <hr />
+                    <Button
+                        variant={'outline-dark'}
+                        onClick={addInfo}
+                    >Добавить новое свойство</Button>
+                    {
+                        info.map(i =>
+                            <Row className="mt-3" key={i.number}>
+                                <Col md={4}>
+                                    <Form.Control
+                                        value={i.title}
+                                        onChange={(e) => changeInfo('title', e.target.value, i.number)}
+                                        placeholder='Введите название свойства'
+                                    />
+                                </Col>
+                                <Col md={4}>
+                                    <Form.Control
+                                        value={i.description}
+                                        onChange={(e) => changeInfo('description', e.target.value, i.number)}
+                                        placeholder='Введите описание свойства'
+                                    />
+                                </Col>
+                                <Col md={4}>
+                                    <Button
+                                        onClick={() => removeInfo(i.number)}
+                                        variant={'outline-dark'}
+
+                                    >Удалить</Button>
+                                </Col>
+                            </Row>
                         )
-                }
+                    }
 
                 </Form>
             </Modal.Body>

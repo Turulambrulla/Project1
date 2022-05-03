@@ -4,8 +4,8 @@ const ApiError = require('../Errors/apiError')
 class AutoController{
     async create(req,res,next) {
         try{
-        const {mark, model, year} = req.body
-        const auto = await Auto.create({mark, model, year})
+        const {mark, model, year, dvs} = req.body
+        const auto = await Auto.create({mark, model, year, dvs})
         return res.json(auto)
     } catch (e) {
         next(ApiError.badRequest(e.message))       
