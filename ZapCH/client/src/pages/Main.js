@@ -15,8 +15,8 @@ const Main = observer(() => {
     const { auto, part } = useContext(Context)
 
     useEffect(() => {
-        fetchAuto().then(data => auto.setAutos(data))
-
+        fetchAuto().then(data => auto.setAuto(data))
+        fetchParts().then(data => part.setPart(data.rows))
     })
 
     return (

@@ -6,6 +6,7 @@ import { PART_ROUTE } from "../utils/consts";
 
 const PartItem = ({ part }) => {
     const history = useHistory()
+
     return (
 
         <Card
@@ -20,6 +21,9 @@ const PartItem = ({ part }) => {
                     <Image width={100} height={100} src={process.env.REACT_APP_API_URL + part.img} />
                     <div>
                         {part.name}
+                    </div>
+                    <div>
+                        {part.brand}
                     </div>
                     <div className={"p-3"} >
                         {'Цена: '+ part.price + ' руб.'}

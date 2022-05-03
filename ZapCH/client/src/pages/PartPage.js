@@ -8,7 +8,7 @@ import { fetchOnePart } from "../http/partAPI";
 const PartPage = () => {
     const [part, setPart] = useState({ info: [] })
     const { id } = useParams()
-
+    console.log(part)
     useEffect(() => {
         fetchOnePart(id).then(data => setPart(data))
     }, [])
